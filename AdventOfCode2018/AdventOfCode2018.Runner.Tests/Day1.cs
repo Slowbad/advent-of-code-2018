@@ -5,25 +5,41 @@ namespace AdventOfCode2018.Runner.Tests
 {
     public class Day1
     {
-        [Fact]
-        public void AddsOneNumber()
+        public class Part1
         {
-            var subject = new Day1Solution();
-            subject.Solve("+1").Should().Be(1);
+            [Fact]
+            public void AddsOneNumber()
+            {
+                var subject = new Day1Solution();
+                subject.Part1("+1").Should().Be(1);
+            }
+
+            [Fact]
+            public void AddsMultipleNumbers()
+            {
+                var subject = new Day1Solution();
+                subject.Part1("+1\n+1").Should().Be(2);
+            }
+
+            [Fact]
+            public void AddsPositiveAndNegativeNumbers()
+            {
+                var subject = new Day1Solution();
+                subject.Part1("+1\n+1\n-1").Should().Be(1);
+            }
         }
         
-        [Fact]
-        public void AddsMultipleNumbers()
+        public class Part2
         {
-            var subject = new Day1Solution();
-            subject.Solve("+1\n+1").Should().Be(2);
-        }
-        
-        [Fact]
-        public void AddsPositiveAndNegativeNumbers()
-        {
-            var subject = new Day1Solution();
-            subject.Solve("+1\n+1\n-1").Should().Be(1);
+            [Theory]
+            [InlineData("+1\n-1", 0)]
+            [InlineData("+3\n+3\n+4\n-2\n-4", 10)]
+            [InlineData("-6\n+3\n+8\n+5\n-6", 5)]
+            public void ItWorks(string input, int expectedResult)
+            {
+                var subject = new Day1Solution();
+                subject.Part2(input).Should().Be(expectedResult);
+            }
         }
     }
 }

@@ -9,12 +9,14 @@ namespace AdventOfCode2018.Runner
         static void Main(string[] args)
         {
             Write("Day 1 Part 1 Solution");
-            Write(new Day1Solution().Solve(GetInput(1,1)).ToString());
+            Write(new Day1Solution().Part1(GetInput(1)).ToString());
+            Write("Day 1 Part 2 Solution");
+            Write(new Day1Solution().Part2(GetInput(1)).ToString());
         }
 
-        private static string GetInput(int dayNum, int partNum)
+        private static string GetInput(int dayNum)
         {
-            return File.ReadAllText(Path.Combine("Input", $"day{dayNum}_part{partNum}.txt"));
+            return File.ReadAllText(Path.Combine("Input", $"day{dayNum}.txt"));
         }
 
         private static void Write(string str)
