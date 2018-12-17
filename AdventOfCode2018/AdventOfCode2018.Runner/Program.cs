@@ -15,6 +15,8 @@ namespace AdventOfCode2018.Runner
             Write(new Day1Solution().Part2(GetInput(1)).ToString());
             Write("Day 3 Part 1 Solution");
             Write(new Day3Solution.Part1().Solve(GetInput(3).Split("\n", StringSplitOptions.RemoveEmptyEntries)).ToString());
+            Write("Day 3 Part 2 Solution");
+            Write(new Day3Solution.Part2().Solve(GetInput(3).Split("\n", StringSplitOptions.RemoveEmptyEntries)).ToString());
         }
 
         private static string GetInput(int dayNum)

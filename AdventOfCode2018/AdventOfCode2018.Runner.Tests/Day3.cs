@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Xunit;
@@ -51,38 +52,74 @@ namespace AdventOfCode2018.Runner.Tests
             public void MakesTheGrid()
             {
                 var subject = new Day3Solution.Part1();
-                subject.gridSize = 10;
+                subject.gridSize = 2;
                 subject.MakeGrid(new List<Day3Solution.Claim>
                 {
                     new Day3Solution.Claim()
                     {
                         Id = 1,
                         Left = 1,
-                        Top = 3,
-                        Width = 4,
-                        Height = 4
+                        Top = 0,
+                        Width = 1,
+                        Height = 1
                     },
                     new Day3Solution.Claim()
                     {
                         Id = 2,
-                        Left = 3,
+                        Left = 1,
+                        Top = 0,
+                        Width = 1,
+                        Height = 1
+                    },
+                    new Day3Solution.Claim()
+                    {
+                        Id = 3,
+                        Left = 0,
                         Top = 1,
-                        Width = 4,
-                        Height = 4
+                        Width = 1,
+                        Height = 1
                     }
-                }).Should().BeEquivalentTo(new int[,]
+                }).Should().BeEquivalentTo(new List<int>[,]
                 {
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
-                    {0, 0, 0, 1, 1, 1, 1, 0, 0, 0},
-                    {0, 1, 1, 2, 2, 1, 1, 0, 0, 0},
-                    {0, 1, 1, 2, 2, 1, 1, 0, 0, 0},
-                    {0, 1, 1, 1, 1, 0, 0, 0, 0, 0},
-                    {0, 1, 1, 1, 1, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                    {new List<int>(), new List<int>{1, 2}},
+                    {new List<int>{3}, new List<int>()},
                 });
+            }
+        }
+
+        public class Part2
+        {
+            [Fact]
+            public void FindEmpty()
+            {
+                var subject = new Day3Solution.Part2();
+                subject.Solve(new List<Day3Solution.Claim>
+                {
+                    new Day3Solution.Claim()
+                    {
+                        Id = 1,
+                        Left = 1,
+                        Top = 0,
+                        Width = 1,
+                        Height = 1
+                    },
+                    new Day3Solution.Claim()
+                    {
+                        Id = 2,
+                        Left = 1,
+                        Top = 0,
+                        Width = 1,
+                        Height = 1
+                    },
+                    new Day3Solution.Claim()
+                    {
+                        Id = 3,
+                        Left = 0,
+                        Top = 1,
+                        Width = 1,
+                        Height = 1
+                    }
+                }).Should().Be(3);
             }
         }
     }
