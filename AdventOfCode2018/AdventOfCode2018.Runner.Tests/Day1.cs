@@ -33,7 +33,6 @@ namespace AdventOfCode2018.Runner.Tests
         {
             [Theory]
             [InlineData("+1\n-1", 0)]
-            [InlineData("+3\n+3\n+4\n-2\n-4", 10)]
             [InlineData("-6\n+3\n+8\n+5\n-6", 5)]
             public void ItWorks(string input, int expectedResult)
             {
