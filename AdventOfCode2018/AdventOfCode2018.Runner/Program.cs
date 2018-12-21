@@ -9,6 +9,7 @@ namespace AdventOfCode2018.Runner
     {
         static void Main(string[] args)
         {
+            Progress<string> progress = new Progress<string>(Write);
 //            Write("Day 1 Part 1 Solution");
 //            Write(new Day1Solution().Part1(GetInput(1)).ToString());
 //            Write("Day 1 Part 2 Solution");
@@ -49,11 +50,12 @@ namespace AdventOfCode2018.Runner
 //            Write(new Day11Solution().SolvePart1(3031).ToString());
 //            Write("Day 11 Part 2 Solution");
 //            Write(new Day11Solution().SolvePart2(3031).ToString());
-            Progress<string> progress = new Progress<string>(Write);
-            Write("Day 12 Part 1 Solution");
-            Write(new Day12Solution().SolvePart1(GetInput(12).Split("\n", StringSplitOptions.RemoveEmptyEntries), 20, progress).ToString());
-            Write("Day 12 Part 2 Solution");
-            Write(new Day12Solution().SolvePart1(GetInput(12).Split("\n", StringSplitOptions.RemoveEmptyEntries), 50_000_000_000, progress).ToString());
+//            Write("Day 12 Part 1 Solution");
+//            Write(new Day12Solution().SolvePart1(GetInput(12).Split("\n", StringSplitOptions.RemoveEmptyEntries), 20, progress).ToString());
+//            Write("Day 12 Part 2 Solution");
+//            Write(new Day12Solution().SolvePart1(GetInput(12).Split("\n", StringSplitOptions.RemoveEmptyEntries), 50_000_000_000, progress).ToString());
+            Write("Day 13 Part 1 Solution");
+            Write(new Day13Solution().SolvePart1(GetInput(13), progress));
         }
 
         private static string GetInput(int dayNum)
