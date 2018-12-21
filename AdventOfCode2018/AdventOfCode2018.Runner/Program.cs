@@ -33,10 +33,14 @@ namespace AdventOfCode2018.Runner
 //            Write(new Day7Solution().SolvePart1(GetInput(7).Split("\n", StringSplitOptions.RemoveEmptyEntries)).ToString());
 //            Write("Day 7 Part 2 Solution");
 //            Write(new Day7Solution().SolvePart2(GetInput(7).Split("\n", StringSplitOptions.RemoveEmptyEntries)).ToString());
-            Write("Day 8 Part 1 Solution");
-            Write(new Day8Solution().SolvePart1(GetInput(8)).ToString());
-            Write("Day 8 Part 2 Solution");
-            Write(new Day8Solution().SolvePart2(GetInput(8)).ToString());
+//            Write("Day 8 Part 1 Solution");
+//            Write(new Day8Solution().SolvePart1(GetInput(8)).ToString());
+//            Write("Day 8 Part 2 Solution");
+//            Write(new Day8Solution().SolvePart2(GetInput(8)).ToString());
+            Write("Day 9 Part 1 Solution");
+            Write(new Day9Solution().SolvePart1(GetInput(9).Trim()).ToString());
+            Write("Day 9 Part 2 Solution");
+            Write(new Day9Solution().SolvePart2(GetInput(9).Trim()).ToString());
         }
 
         private static string GetInput(int dayNum)
