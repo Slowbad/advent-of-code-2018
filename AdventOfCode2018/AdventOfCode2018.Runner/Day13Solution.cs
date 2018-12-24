@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 
 namespace AdventOfCode2018.Runner
 {
+    // This is so ugly. Not sure why I thought of things this way. 
     public class Day13Solution
     {
         public List<Cart> Carts { get; set; } = new List<Cart>();
@@ -13,65 +13,182 @@ namespace AdventOfCode2018.Runner
         public string SolvePart1(string input, IProgress<string> progress = null)
         {
             Parse(input);
-            while (!AnyCrashed())
+            while (true)
             {
-                Tick();
-            }
-            
-            progress?.Report("What?");
-            progress?.Report(RenderMap());
-
-            return Carts
-                .GroupBy(c => (c.X, c.Y))
-                .OrderByDescending(g => g.Count())
-                .First()
-                .Key
-                .ToString();
-        }
-
-        private string RenderMap()
-        {
-            var otherMap = new List<char[]>();
-            foreach (var arr in Map)
-            {
-                otherMap.Add((char[])arr.Clone());
-            }
-
-            foreach (var group in Carts.GroupBy(c => (c.X, c.Y)))
-            {
-                if(group.Count() > 1)
+                foreach (var cart in Carts.OrderBy(c => c.Y).ThenBy(c => c.X))
                 {
-                    otherMap[group.Key.Item2][group.Key.Item1] = 'X';
-                }
-                else
-                {
-                    otherMap[group.Key.Item2][group.Key.Item1] = CartToSymbol(group.First());
+                    var next = cart.GetNextLocation();
+                    var crashedCart = Carts.FirstOrDefault(c => c.X == next.x && c.Y == next.y);
+                    if (crashedCart != null)
+                    {
+                        return next.ToString();
+                    }
+                    
+                    char track = LookAhead(cart);
+                    switch (cart.Direction)
+                    {
+                        case Direction.Up:
+                            cart.Y--;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Left;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Right;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        case Direction.Down:
+                            cart.Y++;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Right;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Left;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        case Direction.Left:
+                            cart.X--;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Up;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Down;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        case Direction.Right:
+                            cart.X++;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Down;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Up;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
             }
-
-            return string.Join("\n", otherMap.Select(arr => string.Join("", arr)));
         }
-
-        private char CartToSymbol(Cart cart)
+        
+        
+        public string SolvePart2(string input, IProgress<string> progress = null)
         {
-            switch (cart.Direction)
+            Parse(input);
+            while (true)
             {
-                case Direction.Up:
-                    return '^';
-                case Direction.Down:
-                    return 'v';
-                case Direction.Left:
-                    return '<';
-                case Direction.Right:
-                    return '>';
-                default:
-                    throw new ArgumentOutOfRangeException();
+                if (Carts.Count(c => !c.Crashed) == 1)
+                {
+                    var cart = Carts.First(c => !c.Crashed);
+                    return (cart.X, cart.Y).ToString();
+                }
+                
+                foreach (var cart in Carts.OrderBy(c => c.Y).ThenBy(c => c.X))
+                {
+                    if (cart.Crashed)
+                    {
+                        continue;
+                    }
+                    
+                    var next = cart.GetNextLocation();
+                    var otherCart = Carts.FirstOrDefault(c => !c.Crashed && c.X == next.x && c.Y == next.y);
+                    if (otherCart != null)
+                    {
+                        cart.Crashed = true;
+                        otherCart.Crashed = true;
+                    }
+                    
+                    char track = LookAhead(cart);
+                    switch (cart.Direction)
+                    {
+                        case Direction.Up:
+                            cart.Y--;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Left;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Right;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        case Direction.Down:
+                            cart.Y++;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Right;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Left;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        case Direction.Left:
+                            cart.X--;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Up;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Down;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        case Direction.Right:
+                            cart.X++;
+                            switch (track)
+                            {
+                                case '\\':
+                                    cart.Direction = Direction.Down;
+                                    break;
+                                case '/':
+                                    cart.Direction = Direction.Up;
+                                    break;
+                                case '+':
+                                    IntersectionTurn(cart);
+                                    break;
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
             }
-        }
-
-        private bool AnyCrashed()
-        {
-            return Carts.GroupBy(c => (c.X, c.Y)).Any(g => g.Count() > 1);
         }
 
         public void Parse(string input)
@@ -130,79 +247,6 @@ namespace AdventOfCode2018.Runner
             throw new Exception("Invalid Symbol");
         }
 
-        public void Tick()
-        {
-            foreach (var cart in Carts.OrderBy(c => (c.Y, c.X)))
-            {
-                char symbol = LookAhead(cart);
-                switch (cart.Direction)
-                {
-                    case Direction.Up:
-                        cart.Y--;
-                        switch (symbol)
-                        {
-                            case '\\':
-                                cart.Direction = Direction.Left;
-                                break;
-                            case '/':
-                                cart.Direction = Direction.Right;
-                                break;
-                            case '+':
-                                IntersectionTurn(cart);
-                                break;
-                        }
-                        break;
-                    case Direction.Down:
-                        cart.Y++;
-                        switch (symbol)
-                        {
-                            case '\\':
-                                cart.Direction = Direction.Right;
-                                break;
-                            case '/':
-                                cart.Direction = Direction.Left;
-                                break;
-                            case '+':
-                                IntersectionTurn(cart);
-                                break;
-                        }
-                        break;
-                    case Direction.Left:
-                        cart.X--;
-                        switch (symbol)
-                        {
-                            case '\\':
-                                cart.Direction = Direction.Up;
-                                break;
-                            case '/':
-                                cart.Direction = Direction.Down;
-                                break;
-                            case '+':
-                                IntersectionTurn(cart);
-                                break;
-                        }
-                        break;
-                    case Direction.Right:
-                        cart.X++;
-                        switch (symbol)
-                        {
-                            case '\\':
-                                cart.Direction = Direction.Down;
-                                break;
-                            case '/':
-                                cart.Direction = Direction.Up;
-                                break;
-                            case '+':
-                                IntersectionTurn(cart);
-                                break;
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
         private void IntersectionTurn(Cart cart)
         {
             switch (cart.NextTurn)
@@ -241,10 +285,10 @@ namespace AdventOfCode2018.Runner
                             cart.Direction = Direction.Left;
                             break;
                         case Direction.Left:
-                            cart.Direction = Direction.Down;
+                            cart.Direction = Direction.Up;
                             break;
                         case Direction.Right:
-                            cart.Direction = Direction.Up;
+                            cart.Direction = Direction.Down;
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -279,6 +323,25 @@ namespace AdventOfCode2018.Runner
         public int Y { get; set; }
         public Direction Direction { get; set; }
         public NextTurn NextTurn { get; set; }
+        public bool Crashed { get; set; }
+        
+
+        public (int x, int y) GetNextLocation()
+        {
+            switch (Direction)
+            {
+                case Direction.Up:
+                    return (X, Y - 1);
+                case Direction.Down:
+                    return (X, Y + 1);
+                case Direction.Left:
+                    return (X - 1, Y);
+                case Direction.Right:
+                    return (X + 1, Y);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 
     public enum Direction

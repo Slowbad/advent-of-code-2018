@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks.Dataflow;
 
 namespace AdventOfCode2018.Runner
@@ -54,8 +55,10 @@ namespace AdventOfCode2018.Runner
 //            Write(new Day12Solution().SolvePart1(GetInput(12).Split("\n", StringSplitOptions.RemoveEmptyEntries), 20, progress).ToString());
 //            Write("Day 12 Part 2 Solution");
 //            Write(new Day12Solution().SolvePart1(GetInput(12).Split("\n", StringSplitOptions.RemoveEmptyEntries), 50_000_000_000, progress).ToString());
+
             Write("Day 13 Part 1 Solution");
-            Write(new Day13Solution().SolvePart1(GetInput(13), progress));
+            Write(new Day13Solution().SolvePart1(GetInput(13)));
+            Write(new Day13Solution().SolvePart2(GetInput(13)));
         }
 
         private static string GetInput(int dayNum)
